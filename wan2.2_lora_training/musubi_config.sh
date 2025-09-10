@@ -6,7 +6,7 @@ LORA_RANK=16
 
 # training schedule
 MAX_EPOCHS=100
-SAVE_EVERY=20
+SAVE_EVERY=50
 
 # seed for AIO LoRA training (low-noise compatible)
 SEED_LOW=42
@@ -15,14 +15,14 @@ SEED_LOW=42
 LEARNING_RATE=3e-4
 
 # dataset: "video" or "image"
-DATASET_TYPE=image
+DATASET_TYPE=video
 
 # resolution list for bucketed training (must be TOML-ish array)
 # e.g. [896, 1152] or [1024, 1024]
-RESOLUTION_LIST="1024, 1024"
+RESOLUTION_LIST="1280, 720"
 
 # common dataset paths (adjust if you keep data elsewhere)
-DATASET_DIR="/workspace/kakwan/image_dataset_here"
+DATASET_DIR="/workspace/kakwan/video_dataset_here"
 
 # AIO LoRA Name
 TITLE_LOW="WAN22_AIO_LoRA"
