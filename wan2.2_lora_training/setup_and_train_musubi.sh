@@ -11,34 +11,7 @@ if ! command -v nvidia-smi >/dev/null 2>&1 || [ "$(nvidia-smi -L | wc -l)" -eq 0
 fi
 echo ">>> GPU detected. Proceeding with single GPU low-noise training."
 
-########################################
-# Interactive dataset type selection
-########################################
-echo ">>> Select training dataset type:"
-echo "1) Images (1024x1024)"
-echo "2) Videos (1280x720, up to 10 seconds)"
-read -p "Enter choice [1-2]: " choice
-
-case $choice in
-  1)
-    echo ">>> Selected: Image training"
-    DATASET_TYPE="image"
-    RESOLUTION_LIST="1024, 1024"
-    DATASET_DIR="/workspace/kakwan/image_dataset_here"
-    MAX_FRAMES="1"
-    ;;
-  2)
-    echo ">>> Selected: Video training"
-    DATASET_TYPE="video"
-    RESOLUTION_LIST="1280, 720"
-    DATASET_DIR="/workspace/kakwan/video_dataset_here"
-    MAX_FRAMES="300"
-    ;;
-  *)
-    echo "ERROR: Invalid choice. Please run again and select 1 or 2."
-    exit 1
-    ;;
-esac
+# Dataset configuration is now handled entirely by musubi_config.sh
 
 ########################################
 # Load user config
@@ -52,7 +25,7 @@ fi
 # shellcheck disable=SC1090
 source "$CONFIG_FILE"
 
-# Override with user selection
+# Export config variables for TOML generation
 export DATASET_TYPE
 export RESOLUTION_LIST
 export DATASET_DIR
@@ -257,7 +230,7 @@ fi
 ########################################
 # 7) Training env niceties
 ########################################
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True,max_split_size_mb:256
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True,max_split_size_mb:512
 
 ########################################
 # ANSI colors for output
