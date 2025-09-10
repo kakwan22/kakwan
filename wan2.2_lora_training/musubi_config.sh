@@ -41,6 +41,7 @@ NUM_REPEATS=1
 CAPTION_EXT=".txt"
 
 # Set to 1 to skip caching after first run (speeds up subsequent runs)
+# IMPORTANT: Keep at 0 for first run to cache both videos AND images for i2v
 SKIP_CACHE=0
 
 # Maximum frames per video (300 = ~10 seconds at 30fps)
