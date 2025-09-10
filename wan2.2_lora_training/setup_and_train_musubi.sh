@@ -231,7 +231,7 @@ echo ">>> Launching training with:"
 echo "    rank=$LORA_RANK, max_epochs=$MAX_EPOCHS, save_every=$SAVE_EVERY, lr=$LEARNING_RATE"
 
 COMMON_FLAGS=(
-  --task t2v-A14B
+  --task i2v-A14B
   --vae "$WAN_VAE"
   --t5 "$WAN_T5"
   --dataset_config "$DATASET_TOML"
