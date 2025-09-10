@@ -59,8 +59,8 @@ MODELS_DIR="$WORKDIR/models"
 
 WAN_VAE="$MODELS_DIR/vae/split_files/vae/wan_2.1_vae.safetensors"
 WAN_T5="$MODELS_DIR/text_encoders/models_t5_umt5-xxl-enc-bf16.pth"
-# Only low noise model for AIO compatibility
-WAN_DIT_LOW="$MODELS_DIR/diffusion_models/split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp16.safetensors"
+# i2v model for image-to-video training
+WAN_DIT_LOW="$MODELS_DIR/diffusion_models/split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp16.safetensors"
 
 # Single output directory for low noise LoRA
 OUT_LOW="$WORKDIR/output"
@@ -134,8 +134,8 @@ if [ ! -f "$SETUP_MARKER" ] || [ "$FORCE_SETUP" = "1" ]; then
     --local-dir "$MODELS_DIR/text_encoders"
   hf download Comfy-Org/Wan_2.1_ComfyUI_repackaged split_files/vae/wan_2.1_vae.safetensors \
     --local-dir "$MODELS_DIR/vae"
-  # Only download low noise model for AIO compatibility
-  hf download Comfy-Org/Wan_2.2_ComfyUI_Repackaged split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp16.safetensors \
+  # Download i2v model for image-to-video training
+  hf download Comfy-Org/Wan_2.2_ComfyUI_Repackaged split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp16.safetensors \
     --local-dir "$MODELS_DIR/diffusion_models"
 
   touch "$SETUP_MARKER"
