@@ -5,8 +5,8 @@ set -euo pipefail
 # GPU detection (simplified for single GPU AIO training)
 ########################################
 # We assume single GPU for AIO LoRA training
-if ! command -v nvidia-smi >/dev/null 2>&1; then
-  echo "ERROR: No CUDA GPU detected. Aborting."
+if ! command -v nvidia-smi >/dev/null 2>&1 || [ "$(nvidia-smi -L | wc -l)" -eq 0 ]; then
+  echo "ERROR: No CUDA GPU detected by nvidia-smi. Aborting."
   exit 1
 fi
 echo ">>> GPU detected. Proceeding with single GPU low-noise training."
@@ -125,8 +125,8 @@ if [ ! -f "$SETUP_MARKER" ] || [ "$FORCE_SETUP" = "1" ]; then
   pip install -e .
   pip install torch==2.8.0 torchvision==0.23.0 xformers==0.0.32.post2 --index-url https://download.pytorch.org/whl/cu128
   pip install protobuf six huggingface_hub==0.34.3
-  pip install hf_transfer hf_xet || true
-  export HF_HUB_ENABLE_HF_TRANSFER=1 || true
+  pip install hf_transfer hf_xet
+  export HF_HUB_ENABLE_HF_TRANSFER=1
 
   # 4) Download models (idempotent)
   echo ">>> Downloading models for AIO LoRA training to $MODELS_DIR ..."
