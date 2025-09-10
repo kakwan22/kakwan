@@ -12,6 +12,35 @@ fi
 echo ">>> GPU detected. Proceeding with single GPU low-noise training."
 
 ########################################
+# Interactive dataset type selection
+########################################
+echo ">>> Select training dataset type:"
+echo "1) Images (1024x1024)"
+echo "2) Videos (1280x720, up to 10 seconds)"
+read -p "Enter choice [1-2]: " choice
+
+case $choice in
+  1)
+    echo ">>> Selected: Image training"
+    DATASET_TYPE="image"
+    RESOLUTION_LIST="1024, 1024"
+    DATASET_DIR="/workspace/kakwan/image_dataset_here"
+    MAX_FRAMES="1"
+    ;;
+  2)
+    echo ">>> Selected: Video training"
+    DATASET_TYPE="video"
+    RESOLUTION_LIST="1280, 720"
+    DATASET_DIR="/workspace/kakwan/video_dataset_here"
+    MAX_FRAMES="300"
+    ;;
+  *)
+    echo "ERROR: Invalid choice. Please run again and select 1 or 2."
+    exit 1
+    ;;
+esac
+
+########################################
 # Load user config
 ########################################
 CONFIG_FILE="${CONFIG_FILE:-musubi_config.sh}"
@@ -22,6 +51,12 @@ if [ ! -f "$CONFIG_FILE" ]; then
 fi
 # shellcheck disable=SC1090
 source "$CONFIG_FILE"
+
+# Override with user selection
+export DATASET_TYPE
+export RESOLUTION_LIST
+export DATASET_DIR
+export MAX_FRAMES
 
 ########################################
 # Helpers for numeric CSV -> TOML arrays
