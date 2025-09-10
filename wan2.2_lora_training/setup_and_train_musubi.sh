@@ -226,7 +226,7 @@ C_LOW="\033[38;5;214m"   # orange
 ########################################
 # 8) Launch training(s) — built from config
 ########################################
-mkdir -p "$OUT_HIGH" "$OUT_LOW"
+mkdir -p "$OUT_LOW"
 echo ">>> Launching training with:"
 echo "    rank=$LORA_RANK, max_epochs=$MAX_EPOCHS, save_every=$SAVE_EVERY, lr=$LEARNING_RATE"
 
