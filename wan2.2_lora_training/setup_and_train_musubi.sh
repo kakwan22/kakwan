@@ -49,6 +49,8 @@ fi
 ########################################
 # Derived paths (from WORKDIR & DATASET_DIR)
 ########################################
+# Set NETWORK_VOLUME default if not set
+NETWORK_VOLUME="${NETWORK_VOLUME:-/workspace/kakwan}"
 WORKDIR="${WORKDIR:-$NETWORK_VOLUME/wan2.2_lora_training}"
 DATASET_DIR="${DATASET_DIR:-$WORKDIR/dataset_here}"
 
