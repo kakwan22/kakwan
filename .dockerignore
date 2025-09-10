@@ -1,0 +1,22 @@
+# Ignore unnecessary files for Docker build
+*.log
+*.tmp
+__pycache__/
+*.py[cod]
+*$py.class
+.git/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Ignore large model files that will be downloaded during runtime
+models/
+output/
+cache/
+
+# Ignore local development files
+.vscode/
+.idea/
+*.local
