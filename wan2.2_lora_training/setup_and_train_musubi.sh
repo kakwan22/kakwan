@@ -239,14 +239,13 @@ COMMON_FLAGS=(
   --xformers --mixed_precision fp16 --fp8_base
   --optimizer_type adamw --optimizer_args weight_decay=0.1
   --learning_rate "$LEARNING_RATE"
-  --gradient_checkpointing --gradient_accumulation_steps 2
-  --max_data_loader_n_workers 1
+  --gradient_checkpointing --gradient_accumulation_steps 1
+  --max_data_loader_n_workers 2
   --network_module networks.lora_wan --network_dim "$LORA_RANK" --network_alpha "$LORA_RANK"
   --timestep_sampling shift --discrete_flow_shift 1.0
   --max_grad_norm 0
   --lr_scheduler polynomial --lr_scheduler_power 8 --lr_scheduler_min_lr_ratio "5e-5"
   --max_train_epochs "$MAX_EPOCHS" --save_every_n_epochs "$SAVE_EVERY"
-  --lowvram
 )
 
 # Simplified single GPU low-noise training for AIO compatibility
