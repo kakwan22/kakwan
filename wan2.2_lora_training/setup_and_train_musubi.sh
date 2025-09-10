@@ -123,7 +123,7 @@ if [ ! -f "$SETUP_MARKER" ] || [ "$FORCE_SETUP" = "1" ]; then
 
   # 3) Python deps
   pip install -e .
-  pip install torch==2.7.0 torchvision==0.22.0 xformers==0.0.30 --index-url https://download.pytorch.org/whl/cu128
+  pip install torch==2.8.0 torchvision==0.23.0 xformers==0.0.30 --index-url https://download.pytorch.org/whl/cu128
   pip install protobuf six huggingface_hub==0.34.3
   pip install hf_transfer hf_xet || true
   export HF_HUB_ENABLE_HF_TRANSFER=1 || true
