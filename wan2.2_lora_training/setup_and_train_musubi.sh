@@ -166,6 +166,7 @@ caption_extension = "$CAPTION_EXT"
 
 [[datasets]]
 video_directory = "$DATASET_DIR"
+image_directory = "$DATASET_DIR/images"
 target_frames = [${TARGET_FRAMES_NORM}]
 frame_extraction = "$FRAME_EXTRACTION"
 frame_stride = ${FRAME_STRIDE}
