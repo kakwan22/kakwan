@@ -39,3 +39,6 @@ NUM_REPEATS=1
 
 # Optional caption extension used by both modes
 CAPTION_EXT=".txt"
+
+# Set to 1 to skip caching after first run (speeds up subsequent runs)
+SKIP_CACHE=0
