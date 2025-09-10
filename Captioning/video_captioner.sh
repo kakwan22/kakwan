@@ -25,7 +25,7 @@ fi
 CONDA_ENV_NAME="TripleX"
 CONDA_ENV_PATH="/tmp/TripleX_miniconda/envs/$CONDA_ENV_NAME"
 SCRIPT_PATH="/TripleX/captioners/gemini.py"
-WORKING_DIR="$NETWORK_VOLUME/video_dataset_here"
+WORKING_DIR="/workspace/kakwan/video_dataset_here"
 REQUIREMENTS_PATH="/TripleX/requirements.txt"
 CONDA_DIR="/tmp/TripleX_miniconda"
 

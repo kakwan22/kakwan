@@ -13,11 +13,11 @@ detect_default_image_dir() {
     if [[ -n "$NETWORK_VOLUME" && -d "$NETWORK_VOLUME/image_dataset_here" ]]; then
         echo "$NETWORK_VOLUME/image_dataset_here"
     # Check for workspace volume
-    elif [[ -d "/workspace/diffusion_pipe_working_folder/image_dataset_here" ]]; then
-        echo "/workspace/diffusion_pipe_working_folder/image_dataset_here"
+    elif [[ -d "/workspace/kakwan/image_dataset_here" ]]; then
+        echo "/workspace/kakwan/image_dataset_here"
     # Check for local volume
-    elif [[ -d "/diffusion_pipe_working_folder/image_dataset_here" ]]; then
-        echo "/diffusion_pipe_working_folder/image_dataset_here"
+    elif [[ -d "/workspace/kakwan/image_dataset_here" ]]; then
+        echo "/workspace/kakwan/image_dataset_here"
     # Fallback to current directory
     else
         echo "."
@@ -80,8 +80,8 @@ show_help() {
     echo ""
     echo "Default image directory detection:"
     echo "  1. \$NETWORK_VOLUME/image_dataset_here (if NETWORK_VOLUME is set)"
-    echo "  2. /workspace/diffusion_pipe_working_folder/image_dataset_here"
-    echo "  3. /diffusion_pipe_working_folder/image_dataset_here"
+    echo "  2. /workspace/kakwan/image_dataset_here"
+    echo "  3. /workspace/kakwan/image_dataset_here"
     echo "  4. Current directory (.)"
 }
 

@@ -43,7 +43,7 @@ echo -e "${RED}Before you start, make sure to add your datasets to their respect
 echo ""
 
 # Create logs directory
-mkdir -p "$NETWORK_VOLUME/logs"
+mkdir -p "/workspace/kakwan/logs"
 
 # Simplified model selection for AIO LoRA training
 echo -e "${BOLD}WAN 2.2 AIO LoRA Training Options:${NC}"
@@ -120,8 +120,8 @@ echo ""
 
 # Check dataset directories
 if [ "$CAPTION_MODE" != "skip" ]; then
-    IMAGE_DIR="$NETWORK_VOLUME/image_dataset_here"
-    VIDEO_DIR="$NETWORK_VOLUME/video_dataset_here"
+    IMAGE_DIR="/workspace/kakwan/image_dataset_here"
+    VIDEO_DIR="/workspace/kakwan/video_dataset_here"
 
     # Check Gemini API key if video captioning is needed
     if [ "$CAPTION_MODE" = "videos" ] || [ "$CAPTION_MODE" = "both" ]; then
@@ -284,14 +284,14 @@ if [ "$CAPTION_MODE" != "skip" ]; then
     if [ "$CAPTION_MODE" = "images" ] || [ "$CAPTION_MODE" = "both" ]; then
         print_info "Cleaning up image dataset directory..."
         # Remove any subdirectories but keep files
-        find "$NETWORK_VOLUME/image_dataset_here" -mindepth 1 -type d -exec rm -rf {} + 2>/dev/null || true
+        find "/workspace/kakwan/image_dataset_here" -mindepth 1 -type d -exec rm -rf {} + 2>/dev/null || true
         print_success "Image dataset directory cleaned"
     fi
 
     if [ "$CAPTION_MODE" = "videos" ] || [ "$CAPTION_MODE" = "both" ]; then
         print_info "Cleaning up video dataset directory..."
         # Remove any subdirectories but keep files
-        find "$NETWORK_VOLUME/video_dataset_here" -mindepth 1 -type d -exec rm -rf {} + 2>/dev/null || true
+        find "/workspace/kakwan/video_dataset_here" -mindepth 1 -type d -exec rm -rf {} + 2>/dev/null || true
         print_success "Video dataset directory cleaned"
     fi
 
@@ -300,13 +300,13 @@ if [ "$CAPTION_MODE" != "skip" ]; then
     # Start image captioning in background if needed
     if [ "$CAPTION_MODE" = "images" ] || [ "$CAPTION_MODE" = "both" ]; then
         print_info "Starting image captioning process..."
-        JOY_CAPTION_SCRIPT="$NETWORK_VOLUME/Captioning/JoyCaption/JoyCaptionRunner.sh"
+        JOY_CAPTION_SCRIPT="/workspace/kakwan/Captioning/JoyCaption/JoyCaptionRunner.sh"
 
         if [ -f "$JOY_CAPTION_SCRIPT" ]; then
             if [ -n "$TRIGGER_WORD" ]; then
-                bash "$JOY_CAPTION_SCRIPT" --trigger-word "$TRIGGER_WORD" > "$NETWORK_VOLUME/logs/image_captioning.log" 2>&1 &
+                bash "$JOY_CAPTION_SCRIPT" --trigger-word "$TRIGGER_WORD" > "/workspace/kakwan/logs/image_captioning.log" 2>&1 &
             else
-                bash "$JOY_CAPTION_SCRIPT" > "$NETWORK_VOLUME/logs/image_captioning.log" 2>&1 &
+                bash "$JOY_CAPTION_SCRIPT" > "/workspace/kakwan/logs/image_captioning.log" 2>&1 &
             fi
             IMAGE_CAPTION_PID=$!
             print_success "Image captioning started in background (PID: $IMAGE_CAPTION_PID)"
@@ -314,7 +314,7 @@ if [ "$CAPTION_MODE" != "skip" ]; then
             # Wait for image captioning with progress indicator
             print_info "Waiting for image captioning to complete..."
             while kill -0 "$IMAGE_CAPTION_PID" 2>/dev/null; do
-                if tail -n 1 "$NETWORK_VOLUME/logs/image_captioning.log" 2>/dev/null | grep -q "All done!"; then
+                if tail -n 1 "/workspace/kakwan/logs/image_captioning.log" 2>/dev/null | grep -q "All done!"; then
                     break
                 fi
                 echo -n "."
@@ -331,16 +331,16 @@ if [ "$CAPTION_MODE" != "skip" ]; then
     # Start video captioning if needed
     if [ "$CAPTION_MODE" = "videos" ] || [ "$CAPTION_MODE" = "both" ]; then
         print_info "Starting video captioning process..."
-        VIDEO_CAPTION_SCRIPT="$NETWORK_VOLUME/Captioning/video_captioner.sh"
+        VIDEO_CAPTION_SCRIPT="/workspace/kakwan/Captioning/video_captioner.sh"
 
         if [ -f "$VIDEO_CAPTION_SCRIPT" ]; then
-            bash "$VIDEO_CAPTION_SCRIPT" > "$NETWORK_VOLUME/logs/video_captioning.log" 2>&1 &
+            bash "$VIDEO_CAPTION_SCRIPT" > "/workspace/kakwan/logs/video_captioning.log" 2>&1 &
             VIDEO_CAPTION_PID=$!
 
             # Wait for video captioning with progress indicator
             print_info "Waiting for video captioning to complete..."
             while kill -0 "$VIDEO_CAPTION_PID" 2>/dev/null; do
-                if tail -n 1 "$NETWORK_VOLUME/logs/video_captioning.log" 2>/dev/null | grep -q "video captioning complete"; then
+                if tail -n 1 "/workspace/kakwan/logs/video_captioning.log" 2>/dev/null | grep -q "video captioning complete"; then
                     break
                 fi
                 echo -n "."
@@ -383,7 +383,7 @@ fi
 print_header "Configuring Dataset"
 echo ""
 
-DATASET_TOML="$NETWORK_VOLUME/diffusion_pipe/examples/dataset.toml"
+DATASET_TOML="/workspace/kakwan/diffusion_pipe/examples/dataset.toml"
 
 if [ -f "$DATASET_TOML" ]; then
     print_info "Updating dataset.toml with actual paths..."
@@ -392,10 +392,10 @@ if [ -f "$DATASET_TOML" ]; then
     cp "$DATASET_TOML" "$DATASET_TOML.backup"
 
     # Replace $NETWORK_VOLUME with actual path in image directory
-    sed -i "s|\$NETWORK_VOLUME/image_dataset_here|$NETWORK_VOLUME/image_dataset_here|g" "$DATASET_TOML"
+    sed -i "s|\$NETWORK_VOLUME/image_dataset_here|/workspace/kakwan/image_dataset_here|g" "$DATASET_TOML"
 
     # Replace $NETWORK_VOLUME with actual path in video directory (even if commented)
-    sed -i "s|\$NETWORK_VOLUME/video_dataset_here|$NETWORK_VOLUME/video_dataset_here|g" "$DATASET_TOML"
+    sed -i "s|\$NETWORK_VOLUME/video_dataset_here|/workspace/kakwan/video_dataset_here|g" "$DATASET_TOML"
 
     # Uncomment video dataset section if user wants to caption videos
     if [ "$CAPTION_MODE" = "videos" ] || [ "$CAPTION_MODE" = "both" ]; then
@@ -424,7 +424,7 @@ else
 fi
 
 # Read training parameters from model TOML file
-MODEL_TOML="$NETWORK_VOLUME/diffusion_pipe/examples/$TOML_FILE"
+MODEL_TOML="/workspace/kakwan/diffusion_pipe/examples/$TOML_FILE"
 if [ -f "$MODEL_TOML" ]; then
     EPOCHS=$(grep "^epochs = " "$MODEL_TOML" | sed 's/epochs = //')
     SAVE_EVERY=$(grep "^save_every_n_epochs = " "$MODEL_TOML" | sed 's/save_every_n_epochs = //')
@@ -466,15 +466,15 @@ if [ "$CAPTION_MODE" != "skip" ]; then
 
     # Always show image dataset info
     if [ "$CAPTION_MODE" = "images" ] || [ "$CAPTION_MODE" = "both" ]; then
-        IMAGE_COUNT=$(find "$NETWORK_VOLUME/image_dataset_here" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.bmp" -o -iname "*.gif" -o -iname "*.tiff" -o -iname "*.webp" \) | wc -l)
-        echo "  📷 Images: $NETWORK_VOLUME/image_dataset_here ($IMAGE_COUNT files)"
+        IMAGE_COUNT=$(find "/workspace/kakwan/image_dataset_here" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.bmp" -o -iname "*.gif" -o -iname "*.tiff" -o -iname "*.webp" \) | wc -l)
+        echo "  📷 Images: /workspace/kakwan/image_dataset_here ($IMAGE_COUNT files)"
         echo "     Repeats: 1 per epoch"
     fi
 
     # Show video dataset info if applicable
     if [ "$CAPTION_MODE" = "videos" ] || [ "$CAPTION_MODE" = "both" ]; then
-        VIDEO_COUNT=$(find "$NETWORK_VOLUME/video_dataset_here" -maxdepth 1 -type f \( -iname "*.mp4" -o -iname "*.avi" -o -iname "*.mov" -o -iname "*.mkv" -o -iname "*.webm" \) | wc -l)
-        echo "  🎬 Videos: $NETWORK_VOLUME/video_dataset_here ($VIDEO_COUNT files)"
+        VIDEO_COUNT=$(find "/workspace/kakwan/video_dataset_here" -maxdepth 1 -type f \( -iname "*.mp4" -o -iname "*.avi" -o -iname "*.mov" -o -iname "*.mkv" -o -iname "*.webm" \) | wc -l)
+        echo "  🎬 Videos: /workspace/kakwan/video_dataset_here ($VIDEO_COUNT files)"
         echo "     Repeats: 5 per epoch"
     fi
 else
@@ -498,10 +498,10 @@ echo ""
 print_info "Before starting training, you can modify the default training parameters in these files:"
 echo ""
 echo -e "${BOLD}1. Model Configuration:${NC}"
-echo "   $NETWORK_VOLUME/diffusion_pipe/examples/$TOML_FILE"
+echo "   /workspace/kakwan/diffusion_pipe/examples/$TOML_FILE"
 echo ""
 echo -e "${BOLD}2. Dataset Configuration:${NC}"
-echo "   $NETWORK_VOLUME/diffusion_pipe/examples/dataset.toml"
+echo "   /workspace/kakwan/diffusion_pipe/examples/dataset.toml"
 echo ""
 
 print_warning "These files contain important settings like:"
@@ -526,8 +526,8 @@ while true; do
             print_info "Training paused for manual configuration."
             echo ""
             echo -e "${BOLD}Configuration Files:${NC}"
-            echo "1. Model settings: $NETWORK_VOLUME/diffusion_pipe/examples/$TOML_FILE"
-            echo "2. Dataset settings: $NETWORK_VOLUME/diffusion_pipe/examples/dataset.toml"
+            echo "1. Model settings: /workspace/kakwan/diffusion_pipe/examples/$TOML_FILE"
+            echo "2. Dataset settings: /workspace/kakwan/diffusion_pipe/examples/dataset.toml"
             echo ""
             print_warning "Please modify these files as needed, then return here to continue."
             echo ""
@@ -540,8 +540,8 @@ while true; do
                         echo ""
 
                         # Re-read training parameters from updated TOML files
-                        MODEL_TOML="$NETWORK_VOLUME/diffusion_pipe/examples/$TOML_FILE"
-                        DATASET_TOML="$NETWORK_VOLUME/diffusion_pipe/examples/dataset.toml"
+                        MODEL_TOML="/workspace/kakwan/diffusion_pipe/examples/$TOML_FILE"
+                        DATASET_TOML="/workspace/kakwan/diffusion_pipe/examples/dataset.toml"
 
                         # Read resolution from dataset.toml
                         if [ -f "$DATASET_TOML" ]; then
@@ -635,7 +635,7 @@ if [ "$CAPTION_MODE" = "images" ] || [ "$CAPTION_MODE" = "both" ]; then
     print_header "Caption Inspection"
     echo ""
     print_info "Please manually inspect the generated captions in:"
-    echo "  $NETWORK_VOLUME/image_dataset_here"
+    echo "  /workspace/kakwan/image_dataset_here"
     echo ""
     print_warning "Check that the captions are accurate and appropriate for your training data."
     echo ""
@@ -667,7 +667,7 @@ if [ "$CAPTION_MODE" = "videos" ] || [ "$CAPTION_MODE" = "both" ]; then
     print_header "Video Caption Inspection"
     echo ""
     print_info "Please manually inspect the generated video captions in:"
-    echo "  $NETWORK_VOLUME/video_dataset_here"
+    echo "  /workspace/kakwan/video_dataset_here"
     echo ""
     print_warning "Check that the video captions are accurate and appropriate for your training data."
     echo ""
@@ -696,7 +696,7 @@ print_header "Starting WAN 2.2 AIO LoRA Training"
 echo ""
 
 print_info "Changing to WAN 2.2 training directory..."
-cd "$NETWORK_VOLUME/wan2.2_lora_training"
+cd "/workspace/kakwan/wan2.2_lora_training"
 
 print_info "Starting AIO-compatible LoRA training with $MODEL_NAME..."
 echo ""
@@ -710,4 +710,4 @@ bash setup_and_train_musubi.sh
 
 print_success "WAN 2.2 AIO LoRA training completed!"
 echo ""
-print_info "Your trained LoRA is saved in: $NETWORK_VOLUME/wan2.2_lora_training/output/"
+print_info "Your trained LoRA is saved in: /workspace/kakwan/wan2.2_lora_training/output/"
