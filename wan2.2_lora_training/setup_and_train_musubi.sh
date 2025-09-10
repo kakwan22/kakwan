@@ -224,7 +224,7 @@ fi
 ########################################
 # 7) Training env niceties
 ########################################
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True,max_split_size_mb:512
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True,max_split_size_mb:256
 
 ########################################
 # ANSI colors for output
