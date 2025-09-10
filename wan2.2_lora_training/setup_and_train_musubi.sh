@@ -202,9 +202,17 @@ fi
 if [ "$SKIP_CACHE" = "1" ]; then
   echo ">>> SKIP_CACHE=1 set; skipping latent & T5 caching."
 else
-  python wan_cache_latents.py \
-    --dataset_config "$DATASET_TOML" \
-    --vae "$WAN_VAE"
+  # Add --i2v flag for i2v training
+  if [[ "$DATASET_TYPE" == "image" ]] || [[ "${TRAINING_TASK:-}" == "i2v" ]]; then
+    python wan_cache_latents.py \
+      --dataset_config "$DATASET_TOML" \
+      --vae "$WAN_VAE" \
+      --i2v
+  else
+    python wan_cache_latents.py \
+      --dataset_config "$DATASET_TOML" \
+      --vae "$WAN_VAE"
+  fi
 
   python src/musubi_tuner/wan_cache_text_encoder_outputs.py \
     --dataset_config "$DATASET_TOML" \
