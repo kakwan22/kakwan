@@ -214,7 +214,7 @@ fi
 ########################################
 # 7) Training env niceties
 ########################################
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True,max_split_size_mb:128
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True,max_split_size_mb:256
 
 ########################################
 # ANSI colors for output
@@ -239,7 +239,7 @@ COMMON_FLAGS=(
   --optimizer_type adamw --optimizer_args weight_decay=0.1
   --learning_rate "$LEARNING_RATE"
   --gradient_checkpointing --gradient_accumulation_steps 2
-  --max_data_loader_n_workers 1
+  --max_data_loader_n_workers 2
   --network_module networks.lora_wan --network_dim "$LORA_RANK" --network_alpha "$LORA_RANK"
   --timestep_sampling shift --discrete_flow_shift 1.0
   --max_grad_norm 0
