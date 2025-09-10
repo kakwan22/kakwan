@@ -42,3 +42,6 @@ CAPTION_EXT=".txt"
 
 # Set to 1 to skip caching after first run (speeds up subsequent runs)
 SKIP_CACHE=0
+
+# Maximum frames per video (300 = ~10 seconds at 30fps)
+MAX_FRAMES=300
