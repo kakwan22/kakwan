@@ -18,7 +18,9 @@ import sys
 
 system_prompt = "Write a detailed description for this image in 50 words or less. Do NOT mention any text that is in the image."
 
-NETWORK_VOLUME = os.getenv("NETWORK_VOLUME")
+NETWORK_VOLUME = os.getenv("NETWORK_VOLUME", "/workspace/kakwan")
+# Create logs directory if it doesn't exist
+os.makedirs(f'{NETWORK_VOLUME}/logs', exist_ok=True)
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
