@@ -19,7 +19,7 @@ DATASET_TYPE=video
 
 # resolution list for bucketed training (must be TOML-ish array)
 # For 720p videos: 1280x720
-RESOLUTION_LIST="1280, 720"
+RESOLUTION_LIST="1024, 576"
 
 # common dataset paths (adjust if you keep data elsewhere)
 DATASET_DIR="/workspace/kakwan/video_dataset_here"
